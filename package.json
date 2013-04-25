@@ -1,0 +1,30 @@
+{
+  "name": "oh-my-hand",
+  "version": "0.0.0",
+  "description": "A Poker assistant",
+  "main": "web.coffee",
+  "dependencies": {
+    "MD5": "~1.0.3",
+    "express": "~3.2.0",
+    "socket.io": "~0.9.14",
+    "underscore": "~1.4.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GotEmB/oh-my-hand.git"
+  },
+  "keywords": [
+    "Poker",
+    "Hands",
+    "Texas",
+    "Hold'Em"
+  ],
+  "author": "Gautham Badhrinathan",
+  "license": "BSD",
+  "readmeFilename": "README.md",
+  "gitHead": "99d699008992a7b4d94480f297264f94d483469c"
+}

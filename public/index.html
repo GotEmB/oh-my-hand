@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<title>Oh My Hand!</title>
+		<link href="lib/bootstrap/bootstrap.min.css" rel="stylesheet">
+		<link href="index.css" rel="stylesheet">
+		<style type="text/css">
+			.btn.glyphicon
+			{
+				padding-top: 8px;
+				padding-bottom: 4px;
+			}
+			span.glyphicon
+			{
+				padding-top: 2px;
+			}
+			.input-group .input-group-addon
+			{
+				white-space: nowrap;
+			}
+			.list-group-item.equal-padding
+			{
+				padding-right: 15px;
+			}
+			.row .row
+			{
+				margin-top: -15px;
+				margin-bottom: -15px;
+			}
+			.row .row [class*="col-span-"]
+			{
+				margin-top: 15px;
+				margin-bottom: 15px;
+			}
+			.list-group-item .glyphicon-pad-right
+			{
+				float: right;
+				margin-right: -15px;
+			}
+			.playerslist-item
+			{
+				position: relative;
+				background: white;
+			}
+			.playerslist-item .glyphicon-th
+			{
+				cursor: move;
+				padding: 7px 10px 3px 10px;
+				margin: -5px -25px -3px -5px;
+			}
+			.panel
+			{
+				box-shadow: none;
+			}
+			.panel.form-horizontal .control-group:last-child
+			{
+				margin-bottom: 0;
+			}
+			input[type="text"][readonly]
+			{
+				cursor: default;
+			}
+		</style>
+		<script data-main="main" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.5/require.min.js" type="text/javascript"></script>
+	</head>
+	<body data-bind="event: {mouseup: playerDND.mouseup, mousemove: playerDND.mousemove, touchend: playerDND.mouseup, touchmove: playerDND.mousemove}">
+		<div class="navbar navbar-inverse navbar-static-top">
+			<div class="container">
+				<div class="navbar-brand">Oh My Hand!</div>
+			</div>
+		</div>
+		<br>
+		<div class="container" data-bind="visible: container() === 'startScreen'" style="display: none">
+			<div class="row">
+				<div class="col-span-4 col-offset-4">
+					<div class="list-group">
+						<a href="#" class="list-group-item" data-bind="click: setupNewGame">
+							Setup New Game
+							<span class="glyphicon glyphicon-chevron-right"></span>
+						</a>
+						<a href="#" class="list-group-item">
+							Join Game
+							<span class="glyphicon glyphicon-chevron-right"></span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container" data-bind="visible: container() === 'setupNewGame'" style="display: none">
+			<div class="row">
+				<div class="col-span-12">
+					<div class="well">
+						<div class="row">
+							<div class="col-span-4">
+								<div class="input-group">
+									<span class="input-group-addon">Balance</span>
+									<input type="text" placeholder="Balance" class="text-right" data-bind="value: balance.value, valueUpdate: 'afterkeydown'">
+								</div>
+							</div>
+							<div class="col-span-4">
+								<div class="input-group">
+									<span class="input-group-addon">Big Blind</span>
+									<input type="text" placeholder="Blinds" class="text-right" data-bind="value: bigBlind.value, valueUpdate: 'afterkeydown'">
+								</div>
+							</div>
+							<div class="col-span-4">
+								<div class="input-group">
+									<span class="input-group-addon">Small Blind</span>
+									<input type="text" placeholder="Blinds" class="text-right" data-bind="value: smallBlind.value, valueUpdate: 'afterkeydown'">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-span-4">
+					<div class="list-group">
+						<div class="list-group-item equal-padding">
+							<input type="text" placeholder="Add Player" data-bind="value: addPlayerInput, valueUpdate: 'afterkeydown', event: {keypress: addPlayer}">
+						</div>
+						<!-- ko foreach: players -->
+						<a href="#" class="list-group-item playerslist-item" data-bind="event: {click: selectPlayer}, css: {active: $parent.selectedPlayer() === $data}">
+							<span data-bind="text: name"></span>
+							<span class="glyphicon glyphicon-th glyphicon-pad-right" data-bind="event: {mousedown: $parent.playerDND.mousedown, touchstart: $parent.playerDND.mousedown}"></span>
+						</a>
+						<!-- /ko -->
+					</div>
+				</div>
+				<div class="col-span-8">
+					<div class="panel form-horizontal" data-bind="visible: selectedPlayer(), with: selectedPlayer">
+						<div class="alert alert-info" data-bind="visible: $data === $parent.currentPlayer()"><strong>This is you.</strong> Don't cheat!</div>
+						<div class="control-group">
+							<label class="control-label">Player Token</label>
+							<div class="controls">
+								<input type="text" class="col-span-8" readonly data-bind="value: token">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">Player Name</label>
+							<div class="controls">
+								<input type="text" placeholder="Player Name" class="col-span-8" data-bind="value: name, valueUpdate: 'afterkeydown'">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">Balance</label>
+							<div class="controls">
+								<input type="text" placeholder="Balance" class="col-span-8" data-bind="value: balance, valueUpdate: 'afterkeydown'">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">Admin</label>
+							<div class="controls">
+								<button class="btn" data-bind="text: (admin() ? 'Yes' : 'No'), css: {'btn-success': admin}, click: toggleAdmin"></button>
+							</div>
+						</div>
+						<div class="control-group">
+							<div class="controls">
+								<button class="btn btn-danger col-span-8" data-bind="click: removePlayer">Remove Player</button>
+							</div>
+						</div>
+					</div>
+					<div class="panel text-center" data-bind="visible: !selectedPlayer()">
+						No Player Selected
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
